@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maappp 💌</title>
+    <style>
+        :root {
+            --pink-soft: #f7e8ef;
+            --pink-mid: #e8cdd8;
+            --pink-dusty: #d4a5b9;
+            --lavender: #d9cee3;
+            --lavender-light: #ede4f3;
+            --cream: #fff5f0;
+            --sage: #cdd9cb;
+            --text-dark: #5d4a52;
+            --text-light: #7d6b73;
+            --card-bg: rgba(255, 250, 252, 0.78);
+            --shadow: 0 12px 32px rgba(140, 100, 115, 0.12);
+            --shadow-hover: 0 18px 40px rgba(140, 100, 115, 0.18);
+            --accent: #dbb0bc;
+            --accent-dark: #b5778a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(160deg, #fdf4f7 0%, #f9edf2 20%, #f4e5ec 40%, #f0e0eb 60%, #f5eaf0 80%, #faf3f6 100%);
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+            cursor: default;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Background Decorations */
+        .bg-decorations {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-flower {
+            position: absolute;
+            opacity: 0.18;
+            animation: swayFlower 8s ease-in-out infinite;
+            font-size: 30px;
+        }
+
+        .bg-star {
+            position: absolute;
+            opacity: 0.15;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+
+        .bg-ribbon {
+            position: absolute;
+            width: 80px;
+            height: 12px;
+            background: linear-gradient(90deg, var(--pink-dusty), var(--lavender), var(--pink-dusty));
+            border-radius: 50px;
+            opacity: 0.2;
+            transform: rotate(-15deg);
+            animation: floatRibbon 6s ease-in-out infinite;
+        }
+
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid rgba(212, 165, 185, 0.3);
+            animation: pulseCircle 5s ease-in-out infinite;
+        }
+
+        @keyframes swayFlower {
+            0%,
+            100% {
+                transform: rotate(-5deg) translateY(0);
+            }
+            50% {
+                transform: rotate(5deg) translateY(-12px);
+            }
+        }
+
+        @keyframes twinkle {
+            0%,
+            100% {
+                opacity: 0.12;
+                transform: scale(0.9);
+            }
+            50% {
+                opacity: 0.28;
+                transform: scale(1.2);
+            }
+        }
+
+        @keyframes floatRibbon {
+            0%,
+            100% {
+                transform: translateY(0) rotate(-15deg);
+            }
+            50% {
+                transform: translateY(-18px) rotate(-10deg);
+            }
+        }
+
+        @keyframes pulseCircle {
+            0%,
+            100% {
+                transform: scale(0.8);
+                opacity: 0.25;
+            }
+            50% {
+                transform: scale(1.3);
+                opacity: 0.5;
+            }
+        }
+
+        /* Partikel */
+        .particles {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            font-size: 16px;
+            opacity: 0;
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(105vh) scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.55;
+            }
+            90% {
+                opacity: 0.12;
+            }
+            100% {
+                transform: translateY(-15vh) scale(1.3) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Layer */
+        .layer {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1),
+                transform 0.8s cubic-bezier(0.23, 1, 0.32, 1),
+                visibility 0.8s;
+            opacity: 0;
+            transform: translateY(20px);
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .layer.active {
+            opacity: 1;
+            transform: translateY(0);
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        /* Layer 1: Amplop */
+        .envelope-layer {
+            z-index: 10;
+            background: transparent;
+        }
+
+        .envelope-container {
+            cursor: pointer;
+            text-align: center;
+            animation: gentlePulse 2.8s infinite ease-in-out;
+            transition: transform 0.2s ease;
+            position: relative;
+        }
+
+        .envelope-container:hover {
+            transform: scale(1.03);
+        }
+
+        .envelope-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 130px;
+            height: 100px;
+            background: linear-gradient(180deg, #fefefe 0%, #f9f3f6 40%, #f2e0e8 100%);
+            border-radius: 12px 12px 18px 18px;
+            box-shadow: 0 8px 28px rgba(150, 110, 125, 0.25), inset 0 1px 0 rgba(255,255,255,0.9);
+            margin: 10px auto 0;
+            position: relative;
+            overflow: visible;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 65px solid transparent;
+            border-right: 65px solid transparent;
+            border-top: 55px solid #fdfafb;
+            filter: drop-shadow(0 3px 4px rgba(150,110,125,0.2));
+            z-index: 2;
+            transition: transform 0.3s ease;
+            transform-origin: top center;
+        }
+
+        .envelope-container:hover .envelope-flap {
+            transform: rotateX(20deg);
+        }
+
+        .envelope-heart {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 42px;
+            z-index: 3;
+            animation: whiteHeartBeat 1.8s ease-in-out infinite;
+            filter: drop-shadow(0 2px 4px rgba(180,140,155,0.3));
+        }
+
+        @keyframes whiteHeartBeat {
+            0%,
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+            15% {
+                transform: translate(-50%, -50%) scale(1.18);
+            }
+            30% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .envelope-hint {
+            margin-top: 18px;
+            font-size: 0.95rem;
+            color: var(--text-light);
+            letter-spacing: 2px;
+            font-weight: 500;
+            animation: fadeHint 2s infinite alternate;
+        }
+
+        @keyframes gentlePulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.06);
+            }
+        }
+
+        @keyframes fadeHint {
+            from {
+                opacity: 0.45;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Card */
+        .card-layer {
+            padding: 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            border: 1.5px solid rgba(220, 190, 200, 0.55);
+            border-radius: 36px;
+            padding: 40px 30px 36px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: box-shadow 0.4s ease, border-color 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            max-width: 480px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 25%, rgba(230, 190, 205, 0.22) 0%, transparent 50%),
+                radial-gradient(circle at 75% 65%, rgba(210, 180, 215, 0.18) 0%, transparent 50%),
+                radial-gradient(circle at 50% 80%, rgba(220, 210, 200, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            width: 70px;
+            height: 70px;
+            background: radial-gradient(circle, rgba(255,255,255,0.6) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(210, 170, 185, 0.7);
+        }
+
+        /* Container untuk dekorasi di dalam card (ditambahkan via JS) */
+        .card-inner-decor {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+            border-radius: 36px;
+        }
+
+        .deco-item {
+            position: absolute;
+            opacity: 0.28;
+            font-size: 18px;
+            animation: floatDeco 6s ease-in-out infinite;
+            color: var(--pink-dusty);
+        }
+
+        @keyframes floatDeco {
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(10deg);
+            }
+        }
+
+        .deco-item:nth-child(odd) {
+            animation-duration: 7s;
+            color: var(--lavender);
+        }
+
+        .deco-item:nth-child(3n) {
+            color: var(--cream);
+            opacity: 0.35;
+        }
+
+        /* Border dekoratif tambahan */
+        .card-outer-border {
+            position: absolute;
+            inset: -6px;
+            border-radius: 40px;
+            padding: 6px;
+            background: linear-gradient(135deg, rgba(212,165,185,0.5), rgba(217,206,227,0.5), rgba(255,245,240,0.5), rgba(212,165,185,0.5));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Foto profil */
+        .profile-pic {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3.5px solid rgba(220, 180, 195, 0.75);
+            box-shadow: 0 8px 22px rgba(150, 110, 125, 0.22);
+            margin: 0 auto 16px;
+            display: block;
+            background: #f9e9ed;
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-pic:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 28px rgba(150, 110, 125, 0.3);
+        }
+
+        .profile-placeholder {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background: #f5e2e7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.4rem;
+            margin: 0 auto 16px;
+            color: #b3959e;
+            border: 3.5px solid rgba(220, 180, 195, 0.75);
+            position: relative;
+            z-index: 1;
+        }
+
+        .greeting {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--pink-dusty);
+            margin-bottom: 6px;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+
+        .recipient-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #5c424b;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, #795e67, #b38b96, #9b7d8a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            z-index: 1;
+        }
+
+        .divider {
+            width: 50px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #d9b6c2, #c5b5d0, transparent);
+            margin: 0 auto 18px;
+            border-radius: 2px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .message {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #6b5660;
+            margin-bottom: 24px;
+            font-weight: 400;
+            position: relative;
+            z-index: 1;
+        }
+
+        .message .highlight {
+            color: var(--accent-dark);
+            font-weight: 600;
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn {
+            padding: 13px 28px;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #e8cdd8, #dbb8c7, #e0c8d8);
+            color: #4a333b;
+            box-shadow: 0 6px 18px rgba(180, 120, 140, 0.3);
+            font-weight: 700;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #e2c0cf, #d4aabc, #dcc0d0);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(180, 120, 140, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(240, 230, 235, 0.55);
+            color: #5a434b;
+            border: 1.5px solid rgba(200, 170, 185, 0.45);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(240, 230, 235, 0.75);
+            border-color: rgba(190, 155, 170, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: scale(0.96);
+        }
+
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.65);
+            transform: scale(0);
+            animation: rippleEffect 0.6s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes rippleEffect {
+            to {
+                transform: scale(5);
+                opacity: 0;
+            }
+        }
+
+        .heart-rain {
+            position: fixed;
+            pointer-events: none;
+            z-index: 100;
+            font-size: 26px;
+            animation: heartFall 2.8s ease-in forwards;
+        }
+
+        @keyframes heartFall {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(105vh) rotate(720deg) scale(0.15);
+                opacity: 0;
+            }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(250, 242, 247, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(210, 180, 195, 0.55);
+            color: #4f3e44;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+            z-index: 200;
+            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 8px 24px rgba(130, 90, 100, 0.14);
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        @media (max-width: 500px) {
+            .card {
+                padding: 30px 18px 28px;
+                border-radius: 26px;
+            }
+            .recipient-name {
+                font-size: 1.5rem;
+            }
+            .envelope-wrapper {
+                width: 110px;
+                height: 84px;
+            }
+            .envelope-flap {
+                border-left-width: 55px;
+                border-right-width: 55px;
+                border-top-width: 46px;
+            }
+            .envelope-heart {
+                font-size: 34px;
+            }
+            .btn {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+                width: 100%;
+                justify-content: center;
+            }
+            .button-group {
+                flex-direction: column;
+            }
+            .profile-pic,
+            .profile-placeholder {
+                width: 95px;
+                height: 95px;
+            }
+            .deco-item {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Decorations -->
+    <div class="bg-decorations" aria-hidden="true">
+        <span class="bg-flower" style="top: 8%; left: 5%; font-size: 28px;">🌸</span>
+        <span class="bg-flower" style="top: 15%; right: 8%; font-size: 24px; animation-delay: 0.8s;">🩷</span>
+        <span class="bg-flower" style="top: 25%; left: 12%; font-size: 32px; animation-delay: 1.6s;">🌷</span>
+        <span class="bg-flower" style="bottom: 20%; right: 10%; font-size: 26px; animation-delay: 2.2s;">🌸</span>
+        <span class="bg-flower" style="bottom: 35%; left: 6%; font-size: 22px; animation-delay: 3s;">💮</span>
+        <span class="bg-flower" style="top: 50%; right: 5%; font-size: 30px; animation-delay: 3.8s;">🌺</span>
+
+        <span class="bg-star" style="top: 12%; left: 30%; font-size: 22px; animation-delay: 0.3s;">✨</span>
+        <span class="bg-star" style="top: 30%; right: 25%; font-size: 18px; animation-delay: 1s;">⭐</span>
+        <span class="bg-star" style="bottom: 28%; left: 35%; font-size: 20px; animation-delay: 1.8s;">✨</span>
+        <span class="bg-star" style="top: 60%; right: 15%; font-size: 16px; animation-delay: 2.5s;">💫</span>
+        <span class="bg-star" style="bottom: 15%; left: 50%; font-size: 24px; animation-delay: 3.2s;">✨</span>
+        <span class="bg-star" style="top: 5%; left: 60%; font-size: 15px; animation-delay: 4s;">🌟</span>
+
+        <div class="bg-ribbon" style="top: 18%; left: 15%; animation-delay: 0.5s;"></div>
+        <div class="bg-ribbon" style="top: 55%; right: 12%; width: 70px; animation-delay: 2s;"></div>
+        <div class="bg-ribbon" style="bottom: 25%; left: 20%; width: 90px; animation-delay: 3.5s;"></div>
+
+        <div class="bg-circle" style="top: 10%; left: 70%; width: 50px; height: 50px; animation-delay: 0.6s;"></div>
+        <div class="bg-circle" style="bottom: 20%; right: 30%; width: 40px; height: 40px; animation-delay: 2.4s;"></div>
+        <div class="bg-circle" style="top: 45%; left: 5%; width: 35px; height: 35px; animation-delay: 3.8s;"></div>
+    </div>
+
+    <!-- Partikel -->
+    <div class="particles" id="particlesContainer" aria-hidden="true"></div>
+
+    <!-- Layer 1 -->
+    <div class="layer envelope-layer active" id="layer1">
+        <div class="envelope-container" id="envelopeContainer">
+            <div class="envelope-wrapper">
+                <div class="envelope-flap"></div>
+                <span class="envelope-heart">🤍</span>
+            </div>
+            <p class="envelope-hint">sentuh untuk membuka</p>
+        </div>
+    </div>
+
+    <!-- Layer 2 -->
+    <div class="layer card-layer" id="layer2">
+        <div class="card">
+            <div class="card-outer-border"></div>
+            <img id="profileImage" class="profile-pic" 
+                 src="https://via.placeholder.com/150/F5E2E7/B38B96?text=Kamu" 
+                 alt="Foto"
+                 onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="profile-placeholder" style="display: none;">🌸</div>
+            <p class="greeting">Untuk tante ijul yang imut</p>
+            <h1 class="recipient-name" id="recipientNameDisplay">Nama Dia</h1>
+            <div class="divider"></div>
+            <p class="message">
+                Halloww, <span id="nameInMessage">Nama Dia</span>...<br>
+                Tante yang paling imut dan menggemaskann yang pernah ada, Adik mo nyampeinn....
+            </p>
+            <div class="button-group">
+                <button class="btn btn-primary next-btn">Lanjut ⮕</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Layer 3 -->
+    <div class="layer card-layer" id="layer3">
+        <div class="card">
+            <div class="card-outer-border"></div>
+            <p class="greeting">Sowwyy...</p>
+            <div class="divider"></div>
+            <p class="message">
+                Adik tau kalo Adik uda <span class="highlight">nyakiti perasaan ijul</span>. 
+                Kata-kata atau sikap Adik buat ijul kecewa, dan Adik sangat nyesell.
+                Seharusnya Adik nda bilang begitu ke ijul...
+            </p>
+            <div class="button-group">
+                <button class="btn btn-primary next-btn">Lanjut ⮕</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Layer 4 -->
+    <div class="layer card-layer" id="layer4">
+        <div class="card">
+            <div class="card-outer-border"></div>
+            <p class="greeting">Jujur dari hati....</p>
+            <div class="divider"></div>
+            <p class="message">
+                Adik bener bener minta maap sama tantee. 
+                Adik hanya berniat untuk mencoba <span class="highlight">menghibur atau menguatkan ijul.</span>
+                Adik bener bener minta maap kalau jadinya bikin ijul sedih... 🤍
+            </p>
+            <div class="button-group">
+                <button class="btn btn-primary" id="btnForgive">Adik minta maap...</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Layer 5 -->
+    <div class="layer card-layer" id="layer5">
+        <div class="card">
+            <div class="card-outer-border"></div>
+            <p class="greeting">Sekali lagi maap...</p>
+            <div class="divider"></div>
+            <p class="message">
+                Maap karna Adik uda bikin hari tante terganggu.. <span class="highlight">Adik tak lakuin lagi janjii.</span>.
+                Maapkan adik wahai ijul si tante paling imut sedunia, antariksa, planet, bumi, galaksi, andromeda, dan seluruh alam semestaaaaa .
+                <br><br>
+                🌸 Timakaci ya masih sempet untuk baca...
+            </p>
+            <div class="button-group">
+                <button class="btn btn-secondary" id="btnClose">:)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        (function() {
+            const CONFIG = {
+                recipientName: 'Julia Khairunisyah',
+                photoURL: 'https://i.imgur.com/hMVZSFH.jpeg',
+            };
+
+            document.getElementById('recipientNameDisplay').textContent = CONFIG.recipientName;
+            document.getElementById('nameInMessage').textContent = CONFIG.recipientName;
+            const profileImg = document.getElementById('profileImage');
+            if (CONFIG.photoURL) profileImg.src = CONFIG.photoURL;
+
+            // Partikel
+            const particlesContainer = document.getElementById('particlesContainer');
+            const shapes = ['🌸', '✿', '🕊️', '🤍', '❀', '·', '🩷', '🌷', '💮', '🌺', '✨', '💫', '🎀', '🍬'];
+            const particleColors = ['#e3c4cf', '#d9cee3', '#f2d5e0', '#e8cdd8', '#f7e8ef', '#fff5f0', '#cdd9cb'];
+
+            function createParticle() {
+                const p = document.createElement('span');
+                p.className = 'particle';
+                p.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+                p.style.left = Math.random() * 100 + '%';
+                p.style.fontSize = (Math.random() * 16 + 12) + 'px';
+                p.style.animationDuration = (Math.random() * 15 + 10) + 's';
+                p.style.animationDelay = Math.random() * 6 + 's';
+                p.style.color = particleColors[Math.floor(Math.random() * particleColors.length)];
+                particlesContainer.appendChild(p);
+                setTimeout(() => p.remove(), 25000);
+            }
+            for (let i = 0; i < 30; i++) setTimeout(createParticle, i * 250);
+            setInterval(() => {
+                if (particlesContainer.children.length < 40) createParticle();
+            }, 1000);
+
+            // Tambahkan dekorasi ke dalam setiap kartu
+            const cards = document.querySelectorAll('.card');
+            const decorIcons = ['💮', '❀', '🩷', '✿', '🌷', '🤍', '✨', '💫', '🎀', '🍬', '·'];
+            cards.forEach(card => {
+                const decorContainer = document.createElement('div');
+                decorContainer.className = 'card-inner-decor';
+                // Buat 8-12 elemen dekorasi acak
+                const count = 10;
+                for (let i = 0; i < count; i++) {
+                    const span = document.createElement('span');
+                    span.className = 'deco-item';
+                    span.textContent = decorIcons[Math.floor(Math.random() * decorIcons.length)];
+                    // Posisi acak di pinggir dalam kartu
+                    const side = Math.floor(Math.random() * 4); // 0:top, 1:right, 2:bottom, 3:left
+                    let top, left;
+                    if (side === 0) { // top
+                        top = Math.random() * 20 + '%';
+                        left = Math.random() * 90 + '%';
+                    } else if (side === 1) { // right
+                        top = Math.random() * 80 + '%';
+                        left = 85 + Math.random() * 15 + '%';
+                    } else if (side === 2) { // bottom
+                        top = 80 + Math.random() * 20 + '%';
+                        left = Math.random() * 90 + '%';
+                    } else { // left
+                        top = Math.random() * 80 + '%';
+                        left = Math.random() * 15 + '%';
+                    }
+                    span.style.top = top;
+                    span.style.left = left;
+                    span.style.animationDelay = Math.random() * 5 + 's';
+                    span.style.fontSize = (Math.random() * 14 + 12) + 'px';
+                    decorContainer.appendChild(span);
+                }
+                card.appendChild(decorContainer);
+            });
+
+            // Navigasi layer
+            const layers = [
+                document.getElementById('layer1'),
+                document.getElementById('layer2'),
+                document.getElementById('layer3'),
+                document.getElementById('layer4'),
+                document.getElementById('layer5')
+            ];
+            let currentLayerIndex = 0;
+
+            function showLayer(index) {
+                if (index < 0 || index >= layers.length) return;
+                layers[currentLayerIndex].classList.remove('active');
+                layers[index].classList.add('active');
+                currentLayerIndex = index;
+            }
+
+            document.getElementById('envelopeContainer').addEventListener('click', () => {
+                showLayer(1);
+            });
+
+            const nextButtons = document.querySelectorAll('.next-btn');
+            nextButtons.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    const parentLayer = this.closest('.layer');
+                    const currentId = parentLayer.id;
+                    const currentIdx = layers.findIndex(l => l.id === currentId);
+                    if (currentIdx !== -1 && currentIdx < layers.length - 1) {
+                        showLayer(currentIdx + 1);
+                        addRipple(e, this);
+                    }
+                });
+            });
+
+            function addRipple(e, button) {
+                const ripple = document.createElement('span');
+                ripple.className = 'ripple';
+                const rect = button.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+                ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+                button.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            }
+
+            document.querySelectorAll('.btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    addRipple(e, this);
+                });
+            });
+
+            const toast = document.getElementById('toast');
+            let toastTimer;
+            function showToast(msg, dur = 3000) {
+                clearTimeout(toastTimer);
+                toast.textContent = msg;
+                toast.classList.add('show');
+                toastTimer = setTimeout(() => toast.classList.remove('show'), dur);
+            }
+
+            function heartRain(emojis = ['❤️', '🩷', '💗', '💖', '💝', '🫶', '💞']) {
+                for (let i = 0; i < 35; i++) {
+                    setTimeout(() => {
+                        const heart = document.createElement('span');
+                        heart.className = 'heart-rain';
+                        heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                        heart.style.left = Math.random() * 100 + '%';
+                        heart.style.top = -(Math.random() * 40 + 10) + 'px';
+                        heart.style.fontSize = (Math.random() * 28 + 18) + 'px';
+                        heart.style.animationDuration = (Math.random() * 2 + 2.5) + 's';
+                        document.body.appendChild(heart);
+                        setTimeout(() => heart.remove(), 3200);
+                    }, i * 50);
+                }
+            }
+
+            document.getElementById('btnForgive').addEventListener('click', function(e) {
+                heartRain();
+                showToast('💖 Maap...', 2000);
+                setTimeout(() => {
+                    showLayer(4);
+                    heartRain(['🌸', '🩷', '💗', '🤍', '✨']);
+                }, 2500);
+            });
+
+            document.getElementById('btnClose').addEventListener('click', () => {
+                showToast('🌸 Semoga hal-hal yang menyenangkan menghampiri tantee.', 2000);
+                setTimeout(() => {
+                    showLayer(0);
+                }, 2500);
+            });
+
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Enter' && currentLayerIndex > 0 && currentLayerIndex < 4) {
+                    if (currentLayerIndex === 3) {
+                        document.getElementById('btnForgive').click();
+                    } else {
+                        const currentLayer = layers[currentLayerIndex];
+                        const btn = currentLayer.querySelector('.btn');
+                        if (btn) btn.click();
+                    }
+                }
+            });
+
+            console.log('💌 5 lapis permintaan maaf siap. Klik amplop untuk memulai.');
+        })();
+    </script>
+</body>
+</html>
